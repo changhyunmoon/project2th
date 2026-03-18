@@ -28,7 +28,7 @@ fi
 echo "--- 도커 실행 환경 테스트 통과 ---"
 
 # 현재 실행 중인 컨테이너 확인 (Up 상태인 blue가 있는지 체크)
-IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "blue" | grep "Up" || true)
+IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "team6-blue" | grep "Up" || true)
 
 if [ -z "$IS_BLUE" ]; then
   echo "### 배포 시작: GREEN => BLUE (8081) ###"
