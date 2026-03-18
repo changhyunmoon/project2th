@@ -8,17 +8,21 @@ COMPOSE_FILE="$BASE_DIR/docker/docker-compose.yml"
 APP_NAME="team6"
 
 # 도커 컴포즈 명령어 정의
-if docker compose version > /dev/null 2>&1; then
-    DOCKER_COMPOSE="sudo docker compose"
-else
+if command -v docker-compose &> /dev/null; then
     DOCKER_COMPOSE="sudo docker-compose"
+else
+    DOCKER_COMPOSE="sudo docker compose"
 fi
 
 # [추가] 실행 전 docker 실행 권한 확인 (에러 발생 시 즉시 종료)
-if ! $DOCKER_COMPOSE ps > /dev/null 2>&1; then
-    echo "❌ 에러: 여전히 도커 실행 권한이 없습니다. sudo 권한을 확인하세요."
+echo "--- 도커 권한 테스트 시작 ---"
+$DOCKER_COMPOSE ps
+if [ $? -ne 0 ]; then
+    echo "❌ 에러: sudo 권한으로도 도커 명령어를 실행할 수 없습니다."
+    echo "직접 'sudo docker ps'를 입력해서 확인해보세요."
     exit 1
 fi
+echo "--- 도커 권한 테스트 통과 ---"
 
 # 현재 실행 중인 컨테이너 확인 (Up 상태인 blue가 있는지 체크)
 IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "blue" | grep "Up" || true)
