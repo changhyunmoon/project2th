@@ -4,6 +4,8 @@ on:
   push:
     #main 브랜치에 코드가 들어왔을 때 작동
     branches: [ "main" ]
+    paths:
+      - 'backend/**'
 
 jobs:
   ###########################################################################################
@@ -29,12 +31,13 @@ jobs:
       # 보안상 배포에 사용할 properties 파일을 직접 올리지 않고 github에서 관리
       - name: Make application-prod.yml
         run: |
-          mkdir -p src/main/resources
+          mkdir -p backend/src/main/resources
           #저장된 .properties 파일 복원
-          echo "${{ secrets.APPLICATION_PROD }}" | base64 --decode > src/main/resources/application-prod.yml
+          echo "${{ secrets.APPLICATION_PROD }}" | base64 --decode > backend/src/main/resources/application-prod.yml
 
       #자바 코드를 실행 가능한 파일(.jar) 로 컴파일
       - name: Build with Gradle
+        working-directory: ./backend
         run: |
           #실행 권한 부여
            chmod +x gradlew
@@ -52,7 +55,7 @@ jobs:
       # 내 서버를 통쨰로 담은 이미지 생성
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.IMAGE_NAME}}:${{secrets.IMAGE_TAG}} .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.IMAGE_NAME}}:${{secrets.IMAGE_TAG}} ./backend
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.IMAGE_NAME}}:${{secrets.IMAGE_TAG}}
 
   ###########################################################################################
@@ -68,7 +71,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}      # EC2 IP 주소
           username: ${{ secrets.EC2_USER }}  # 접속 계정 (ubuntu 등)
           key: ${{ secrets.EC2_SSH_KEY }}    # .pem 키 내용
-          source: "deployment/prod/**"       # 내 프로젝트의 이 폴더 내용들을
+          source: "backend/deployment/prod/**"       # 내 프로젝트의 이 폴더 내용들을
           target: "~/deployment/prod"        # EC2의 이 경로로 보냅니다.
           strip_components: 2                # 전송 시 앞의 경로(deployment/prod)는 떼고 파일만 보냅니다.
           overwrite: true
