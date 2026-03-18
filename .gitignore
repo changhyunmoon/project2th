@@ -12,9 +12,9 @@ backend/*.jar
 backend/.env
 
 # 설정 파일 및 민감 정보
-backend/src/main/resources/application.properties
-backend/src/main/resources/application.yml
+backend/src/main/resources/application.*
 # 로컬 개발용 별도 설정 파일이 있다면 포함
+backend/src/main/resources/application-prod.*
 backend/src/main/resources/application-local.*
 
 # --- IDE & OS ---
