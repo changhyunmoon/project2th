@@ -15,14 +15,16 @@ else
 fi
 
 # [추가] 실행 전 docker 실행 권한 확인 (에러 발생 시 즉시 종료)
-echo "--- 도커 권한 테스트 시작 ---"
-$DOCKER_COMPOSE ps
+echo "--- 도커 실행 환경 테스트 시작 ---"
+
+# ps 대신 config 명령어로 설정 파일이 올바른지 먼저 체크합니다.
+$DOCKER_COMPOSE -f "$COMPOSE_FILE" config > /dev/null 2>&1
+
 if [ $? -ne 0 ]; then
-    echo "❌ 에러: sudo 권한으로도 도커 명령어를 실행할 수 없습니다."
-    echo "직접 'sudo docker ps'를 입력해서 확인해보세요."
+    echo "❌ 에러: 도커 설정 파일($COMPOSE_FILE)을 읽을 수 없거나 형식이 잘못되었습니다."
     exit 1
 fi
-echo "--- 도커 권한 테스트 통과 ---"
+echo "--- 도커 실행 환경 테스트 통과 ---"
 
 # 현재 실행 중인 컨테이너 확인 (Up 상태인 blue가 있는지 체크)
 IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "blue" | grep "Up" || true)
