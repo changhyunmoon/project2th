@@ -4,7 +4,8 @@
 # GitHub Actions에서 보낸 파일들이 위치한 정확한 경로로 수정
 BASE_DIR="/home/ubuntu/deployment/prod"
 NGINX_CONF_DIR="$BASE_DIR/nginx"
-COMPOSE_FILE="$BASE_DIR/docker/docker-compose.yml"
+DOCKER_DIR="$BASE_DIR/docker"
+COMPOSE_FILE="$DOCKER_DIR/docker-compose.yml"
 
 # 도커 컴포즈 명령어 정의
 if command -v docker-compose &> /dev/null; then
@@ -19,10 +20,9 @@ echo "--- 도커 실행 환경 테스트 시작 ---"
 cd "$DOCKER_DIR"
 
 # ps 대신 config 명령어로 설정 파일이 올바른지 먼저 체크합니다.
-$DOCKER_COMPOSE -f "$COMPOSE_FILE" config > /dev/null 2>&1
-
+$DOCKER_COMPOSE config > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    echo "❌ 에러: 도커 설정 파일($COMPOSE_FILE)을 읽을 수 없거나 형식이 잘못되었습니다."
+    echo "❌ 에러: 도커 설정 파일($COMPOSE_FILE)을 읽을 수 없거나 .env 파일이 없습니다."
     exit 1
 fi
 echo "--- 도커 실행 환경 테스트 통과 ---"
