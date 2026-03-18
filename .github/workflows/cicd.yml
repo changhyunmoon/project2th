@@ -74,7 +74,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}    # .pem 키 내용
           source: "backend/deployment/prod/**"       # 내 프로젝트의 이 폴더 내용들을
           target: "~/deployment/prod"        # EC2의 이 경로로 보냅니다.
-          strip_components: 2                # 전송 시 앞의 경로(deployment/prod)는 떼고 파일만 보냅니다.
+          strip_components: 3                # 전송 시 앞의 경로(deployment/prod)는 떼고 파일만 보냅니다.
           overwrite: true
 
       - name: Deploy to EC2 # 2. SSH로 EC2에 직접 접속해서 명령어를 실행합니다.
@@ -89,6 +89,8 @@ jobs:
             
             # 1. 환경 변수(.env) 파일을 생성합니다. 도커 아이디와 기타 비공개 설정들을 저장합니다.
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > ./docker/.env
+            echo "IMAGE_NAME=${{ secrets.IMAGE_NAME }}" >> ./docker/.env
+            echo "IMAGE_TAG=${{ secrets.IMAGE_TAG }}" >> ./docker/.env
             echo "${{ secrets.ENV_PROD }}" >> ./docker/.env
             
             # 2. 파일이 잘 생성되었는지 리스트를 출력해 확인합니다.
