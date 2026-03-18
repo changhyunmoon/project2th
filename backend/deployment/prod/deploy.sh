@@ -40,16 +40,16 @@ if [ -z "$IS_BLUE" ]; then
   $DOCKER_COMPOSE -f "$COMPOSE_FILE" up -d blue || exit 1
 
   # 헬스체크
-  for i in {1..20}; do
+  for i in {1..10}; do
     echo "3. Blue 헬스체크 중... ($i/20)"
-    sleep 5
+    sleep 3
     # 컨테이너 내부 8080이 아닌, 호스트로 노출된 8081로 찌릅니다.
     REQUEST=$(curl -s http://127.0.0.1:8081/actuator/health | grep "UP" || true)
     if [ -n "$REQUEST" ]; then
       echo "✅ 헬스체크 성공!"
       break
     fi
-    if [ $i -eq 20 ]; then
+    if [ $i -eq 10 ]; then
       echo "❌ 헬스체크 실패! 배포를 중단합니다."
       # 실패 시 방금 띄운 컨테이너는 정리
       $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop blue || true
