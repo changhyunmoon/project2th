@@ -2,10 +2,9 @@
 
 # 1. 환경 설정
 # GitHub Actions에서 보낸 파일들이 위치한 정확한 경로로 수정
-BASE_DIR="$HOME/deployment/prod"
+BASE_DIR="/home/ubuntu/deployment/prod"
 NGINX_CONF_DIR="$BASE_DIR/nginx"
 COMPOSE_FILE="$BASE_DIR/docker/docker-compose.yml"
-APP_NAME="team6"
 
 # 도커 컴포즈 명령어 정의
 if command -v docker-compose &> /dev/null; then
@@ -16,6 +15,8 @@ fi
 
 # [추가] 실행 전 docker 실행 권한 확인 (에러 발생 시 즉시 종료)
 echo "--- 도커 실행 환경 테스트 시작 ---"
+
+cd "$DOCKER_DIR"
 
 # ps 대신 config 명령어로 설정 파일이 올바른지 먼저 체크합니다.
 $DOCKER_COMPOSE -f "$COMPOSE_FILE" config > /dev/null 2>&1
