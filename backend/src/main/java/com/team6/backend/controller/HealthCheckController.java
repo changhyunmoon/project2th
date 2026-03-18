@@ -13,7 +13,7 @@ public class HealthCheckController {
 
     //나중에 여기 부분 security 설정에서 permitAll 해야됨
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<?> hello(){
         return ResponseEntity.ok("Hello World");
     }
