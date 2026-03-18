@@ -87,7 +87,7 @@ jobs:
             mkdir -p ~/deployment/prod
             cd ~/deployment/prod
             
-            # 1. 환경 변수(.env) 파일을 생성합니다. 도커 아이디와 기타 비공개 설정들을 저장합니다.
+            # 1. .env 파일을 'docker' 폴더 안에 생성
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > ./docker/.env
             echo "IMAGE_NAME=${{ secrets.IMAGE_NAME }}" >> ./docker/.env
             echo "IMAGE_TAG=${{ secrets.IMAGE_TAG }}" >> ./docker/.env
