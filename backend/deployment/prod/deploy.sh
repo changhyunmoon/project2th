@@ -9,14 +9,14 @@ APP_NAME="team6"
 
 # 도커 컴포즈 명령어 정의
 if docker compose version > /dev/null 2>&1; then
-    DOCKER_COMPOSE="docker compose"
+    DOCKER_COMPOSE="sudo docker compose"
 else
-    DOCKER_COMPOSE="docker-compose"
+    DOCKER_COMPOSE="sudo docker-compose"
 fi
 
 # [추가] 실행 전 docker 실행 권한 확인 (에러 발생 시 즉시 종료)
 if ! $DOCKER_COMPOSE ps > /dev/null 2>&1; then
-    echo "❌ 에러: 도커 실행 권한이 없습니다. 'sudo usermod -aG docker $USER'를 실행했는지 확인하세요."
+    echo "❌ 에러: 여전히 도커 실행 권한이 없습니다. sudo 권한을 확인하세요."
     exit 1
 fi
 
