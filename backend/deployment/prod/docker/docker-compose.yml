@@ -37,7 +37,7 @@ services:
     ports:
       - "8082:8080"
     env_file:
-      - ../.env
+      - .env
     restart: always
     networks:
       - team6-bluegreen
