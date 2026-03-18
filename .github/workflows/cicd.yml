@@ -84,8 +84,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            mkdir -p ~/deployment/prod
             cd ~/deployment/prod
+          
+            mkdir -p docker nginx
             
             # 1. .env 파일을 'docker' 폴더 안에 생성
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > ./docker/.env
