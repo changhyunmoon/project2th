@@ -23,7 +23,7 @@ services:
       - team6-bluegreen
     #애플리케이션 정상 작동 중인지 체크
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:8080/api/actuator/health || exit 1" ]
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
       interval: 10s
       timeout: 3s
       retries: 5
