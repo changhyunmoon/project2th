@@ -95,8 +95,8 @@ jobs:
             
             # 1. .env 파일을 'docker' 폴더 안에 생성
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > ./docker/.env
-            echo "IMAGE_NAME=${{ secrets.BACKEND_IMAGE_NAME }}" >> ./docker/.env
-            echo "IMAGE_TAG=${{ secrets.BACKEND_IMAGE_TAG }}" >> ./docker/.env
+            echo "BACKEND_IMAGE_NAME=${{ secrets.BACKEND_IMAGE_NAME }}" >> ./docker/.env
+            echo "BACKEND_IMAGE_TAG=${{ secrets.BACKEND_IMAGE_TAG }}" >> ./docker/.env
             echo "${{ secrets.ENV_PROD }}" >> ./docker/.env
             
             # 2. 파일이 잘 생성되었는지 리스트를 출력해 확인합니다.
