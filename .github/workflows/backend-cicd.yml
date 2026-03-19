@@ -1,4 +1,4 @@
-name: Blue-Green CD
+name: Backend Blue-Green CI/CD
 
 on:
   push:
@@ -56,8 +56,8 @@ jobs:
       # 내 서버를 통쨰로 담은 이미지 생성
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.IMAGE_NAME}}:${{secrets.IMAGE_TAG}} ./backend
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.IMAGE_NAME}}:${{secrets.IMAGE_TAG}}
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.BACKEND_IMAGE_NAME}}:${{ secrets.BACKEND_IMAGE_TAG }} ./backend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.BACKEND_IMAGE_NAME}}:${{ secrets.BACKEND_IMAGE_TAG }}
 
   ###########################################################################################
   deploy:
@@ -72,9 +72,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}      # EC2 IP 주소
           username: ${{ secrets.EC2_USER }}  # 접속 계정 (ubuntu 등)
           key: ${{ secrets.EC2_SSH_KEY }}    # .pem 키 내용
-          source: "backend/deployment/prod/**"       # 내 프로젝트의 이 폴더 내용들을
-          target: "~/deployment/prod"        # EC2의 이 경로로 보냅니다.
-          strip_components: 3                # 전송 시 앞의 경로(deployment/prod)는 떼고 파일만 보냅니다.
+          source: "backend/deployment/backend/**"       # 내 프로젝트의 이 폴더 내용들을
+          target: "/home/ubuntu/deployment/backend"        # EC2의 이 경로로 보냅니다.
+          strip_components: 3                # 전송 시 앞의 경로(deployment/backend)는 떼고 파일만 보냅니다.
           overwrite: true
 
       - name: Deploy to EC2 # 2. SSH로 EC2에 직접 접속해서 명령어를 실행합니다.
@@ -84,14 +84,19 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/deployment/prod
-          
-            mkdir -p docker nginx
+            
+            # 1. 작업 디렉토리 절대 경로 설정
+            BE_DIR="/home/ubuntu/deployment/backend"
+            
+            # 2. 폴더 생성 및 이동 (권한 설정 포함)
+            sudo mkdir -p $BE_DIR/docker $BE_DIR/nginx
+            sudo chown -R ubuntu:ubuntu $BE_DIR
+            cd $BE_DIR
             
             # 1. .env 파일을 'docker' 폴더 안에 생성
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > ./docker/.env
-            echo "IMAGE_NAME=${{ secrets.IMAGE_NAME }}" >> ./docker/.env
-            echo "IMAGE_TAG=${{ secrets.IMAGE_TAG }}" >> ./docker/.env
+            echo "IMAGE_NAME=${{ secrets.BACKEND_IMAGE_NAME }}" >> ./docker/.env
+            echo "IMAGE_TAG=${{ secrets.BACKEND_IMAGE_TAG }}" >> ./docker/.env
             echo "${{ secrets.ENV_PROD }}" >> ./docker/.env
             
             # 2. 파일이 잘 생성되었는지 리스트를 출력해 확인합니다.
@@ -99,6 +104,5 @@ jobs:
             ls -al ./docker/.env
             
             # 3. 배포 스크립트(deploy.sh)에 실행 권한을 주고 실행합니다. 
-            # 이 스크립트가 구버전을 끄고 신버전을 켜는 '무중단 배포' 로직을 수행할 것입니다.
             chmod +x deploy.sh
             sudo ./deploy.sh

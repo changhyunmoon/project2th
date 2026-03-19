@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  frontend-blue:
+    image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:${FRONTEND_IMAGE_TAG}
+    container_name: frontend-blue
+    ports:
+      - "8083:80"
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - team6-frontend
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+      start_period: 10s
+
+  frontend-green:
+    image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:${FRONTEND_IMAGE_TAG}
+    container_name: frontend-green
+    ports:
+      - "8084:80"
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - team6-frontend
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+      start_period: 10s
+
+networks:
+  team6-frontend:
+    driver: bridge
