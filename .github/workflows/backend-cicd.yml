@@ -99,11 +99,11 @@ jobs:
             echo "BACKEND_IMAGE_TAG=${{ secrets.BACKEND_IMAGE_TAG }}" >> ./docker/.env
             echo "${{ secrets.ENV_PROD }}" >> ./docker/.env
             
-            # 2. 파일이 잘 생성되었는지 리스트를 출력해 확인합니다.
+            # 2. 파일이 잘 생성되었는지 리스트를 출력해 확인합니다.!
             echo "Checking .env file location:"
             ls -al ./docker/.env
             
             # 3. 배포 스크립트(deploy.sh)에 실행 권한을 주고 실행합니다. 
             chmod +x deploy.sh
 
-            sudo ./deploy.sh
+            sudo ./deploy.sh 
