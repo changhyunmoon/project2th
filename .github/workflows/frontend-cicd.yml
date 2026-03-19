@@ -58,9 +58,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           # 프론트엔드용 배포 스크립트가 들어있는 경로
-          source: "frontend/deployment/prod/**"
+          source: "frontend/deployment/**"
           target: "/home/ubuntu/deployment/frontend"
-          strip_components: 3
+          strip_components: 2
           overwrite: true
 
       - name: Deploy to EC2 via SSH

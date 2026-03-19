@@ -72,9 +72,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}      # EC2 IP 주소
           username: ${{ secrets.EC2_USER }}  # 접속 계정 (ubuntu 등)
           key: ${{ secrets.EC2_SSH_KEY }}    # .pem 키 내용
-          source: "backend/deployment/backend/**"       # 내 프로젝트의 이 폴더 내용들을
+          source: "backend/deployment/**"       # 내 프로젝트의 이 폴더 내용들을
           target: "/home/ubuntu/deployment/backend"        # EC2의 이 경로로 보냅니다.
-          strip_components: 3                # 전송 시 앞의 경로(deployment/backend)는 떼고 파일만 보냅니다.
+          strip_components: 2                # 전송 시 앞의 경로(deployment/backend)는 떼고 파일만 보냅니다.
           overwrite: true
 
       - name: Deploy to EC2 # 2. SSH로 EC2에 직접 접속해서 명령어를 실행합니다.
