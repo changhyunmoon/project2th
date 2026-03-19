@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir -p backend/src/main/resources
           #저장된 .properties 파일 복원
-          echo "${{ secrets.APPLICATION_PROD }}" > backend/src/main/resources/application-prod.yml
+          echo '${{ secrets.APPLICATION_PROD }}' > backend/src/main/resources/application-prod.yml
 
       #자바 코드를 실행 가능한 파일(.jar) 로 컴파일
       - name: Build with Gradle
@@ -104,6 +104,5 @@ jobs:
             ls -al ./docker/.env
             
             # 3. 배포 스크립트(deploy.sh)에 실행 권한을 주고 실행합니다. 
-            chmod +x deploy.sh
-
+            chmod +x ./deploy.sh
             sudo ./deploy.sh 
