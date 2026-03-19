@@ -27,16 +27,16 @@ fi
 echo "--- 도커 실행 환경 테스트 통과 ---"
 
 # 현재 실행 중인 컨테이너 확인 (Up 상태인 blue가 있는지 체크)
-IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "team6-blue" | grep "Up" || true)
+IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "backend-blue" | grep "Up" || true)
 
 if [ -z "$IS_BLUE" ]; then
   echo "### 배포 시작: GREEN => BLUE (8081) ###"
 
   echo "1. Blue 이미지 가져오기"
-  $DOCKER_COMPOSE -f "$COMPOSE_FILE" pull blue || exit 1
+  $DOCKER_COMPOSE -f "$COMPOSE_FILE" pull backend-blue || exit 1
 
   echo "2. Blue 컨테이너 실행"
-  $DOCKER_COMPOSE -f "$COMPOSE_FILE" up -d blue || exit 1
+  $DOCKER_COMPOSE -f "$COMPOSE_FILE" up -d backend-blue || exit 1
 
   # 헬스체크
   for i in {1..20}; do
@@ -51,7 +51,7 @@ if [ -z "$IS_BLUE" ]; then
     if [ $i -eq 20 ]; then
       echo "❌ 헬스체크 실패! 배포를 중단합니다."
       # 실패 시 방금 띄운 컨테이너는 정리
-      $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop blue || true
+      $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop backend-blue || true
       exit 1
     fi
   done
@@ -68,16 +68,16 @@ if [ -z "$IS_BLUE" ]; then
   fi
 
   echo "5. 이전 컨테이너(Green) 종료"
-  $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop green || true
+  $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop backend-green || true
 
 else
   echo "### 배포 시작: BLUE => GREEN (8082) ###"
 
   echo "1. Green 이미지 가져오기"
-  $DOCKER_COMPOSE -f "$COMPOSE_FILE" pull green || exit 1
+  $DOCKER_COMPOSE -f "$COMPOSE_FILE" pull backend-green || exit 1
 
   echo "2. Green 컨테이너 실행"
-  $DOCKER_COMPOSE -f "$COMPOSE_FILE" up -d green || exit 1
+  $DOCKER_COMPOSE -f "$COMPOSE_FILE" up -d backend-green || exit 1
 
   for i in {1..20}; do
     echo "3. Green 헬스체크 중... ($i/20)"
@@ -89,7 +89,7 @@ else
     fi
     if [ $i -eq 20 ]; then
       echo "❌ 헬스체크 실패! 배포를 중단합니다."
-      $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop green || true
+      $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop backend-green || true
       exit 1
     fi
   done
@@ -105,7 +105,7 @@ else
   fi
 
   echo "5. 이전 컨테이너(Blue) 종료"
-  $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop blue || true
+  $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop backend-blue || true
 fi
 
 echo "🎊 배포 완료!"

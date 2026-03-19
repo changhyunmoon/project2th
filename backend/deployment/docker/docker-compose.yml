@@ -3,10 +3,10 @@ version: "3.8"
 
 services:
   #서비스 정의
-  blue:
+  backend-blue:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:${BACKEND_IMAGE_TAG}
     #컨테이너 실행될 때 부여될 이름
-    container_name: team6-blue
+    container_name: backend-blue
     #prod 프로필로 실행되도록 설정
     environment:
       - SPRING_PROFILES_ACTIVE=prod
@@ -29,9 +29,9 @@ services:
       retries: 5
       start_period: 30s
 
-  green:
+  backend-green:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:${BACKEND_IMAGE_TAG}
-    container_name: team6-green
+    container_name: backend-green
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     ports:
