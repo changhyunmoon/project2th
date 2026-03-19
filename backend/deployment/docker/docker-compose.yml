@@ -52,4 +52,4 @@ services:
 networks:
   team6-bluegreen:
     #external: true
-    driver: bridgev
+    driver: bridge
