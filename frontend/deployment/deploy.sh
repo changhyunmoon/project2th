@@ -47,13 +47,13 @@ if [ -z "$IS_BLUE" ]; then
     fi
   done
 
-  echo "4. Nginx 설정 교체 (fe_blue.conf -> frontend.conf)"
-  if [ -f "$NGINX_CONF_DIR/fe_blue.conf" ]; then
-      sudo cp "$NGINX_CONF_DIR/fe_blue.conf" /etc/nginx/conf.d/frontend.conf
+  echo "4. Nginx 설정 교체 (fe_blue.inc -> frontend.inc)"
+  if [ -f "$NGINX_CONF_DIR/fe_blue.inc" ]; then
+      sudo cp "$NGINX_CONF_DIR/fe_blue.inc" /etc/nginx/conf.d/frontend.inc
       sudo nginx -s reload
       echo "✅ Nginx FE 설정 로드 완료 (Blue)"
   else
-      echo "❌ 에러: fe_blue.conf 파일을 찾을 수 없습니다."
+      echo "❌ 에러: fe_blue.inc 파일을 찾을 수 없습니다."
       exit 1
   fi
   $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop frontend-green || true
@@ -79,13 +79,13 @@ else
     fi
   done
 
-  echo "4. Nginx 설정 교체 (fe_green.conf -> frontend.conf)"
-  if [ -f "$NGINX_CONF_DIR/fe_green.conf" ]; then
-      sudo cp "$NGINX_CONF_DIR/fe_green.conf" /etc/nginx/conf.d/frontend.conf
+  echo "4. Nginx 설정 교체 (fe_green.inc -> frontend.inc)"
+  if [ -f "$NGINX_CONF_DIR/fe_green.inc" ]; then
+      sudo cp "$NGINX_CONF_DIR/fe_green.inc" /etc/nginx/conf.d/frontend.inc
       sudo nginx -s reload
       echo "✅ Nginx FE 설정 로드 완료 (Green)"
   else
-      echo "❌ 에러: fe_green.conf 파일을 찾을 수 없습니다."
+      echo "❌ 에러: fe_green.inc 파일을 찾을 수 없습니다."
       exit 1
   fi
   $DOCKER_COMPOSE -f "$COMPOSE_FILE" stop frontend-blue || true

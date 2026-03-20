@@ -56,14 +56,14 @@ if [ -z "$IS_BLUE" ]; then
     fi
   done
 
-  echo "4. Nginx 설정 교체 (be_blue.conf -> backend.conf)"
+  echo "4. Nginx 설정 교체 (be_blue.inc -> backend.inc)"
   # Nginx 설정 파일이 존재하는지 확인 후 복사
-  if [ -f "$NGINX_CONF_DIR/be_blue.conf" ]; then
-      sudo cp "$NGINX_CONF_DIR/be_blue.conf" /etc/nginx/conf.d/backend.conf
+  if [ -f "$NGINX_CONF_DIR/be_blue.inc" ]; then
+      sudo cp "$NGINX_CONF_DIR/be_blue.inc" /etc/nginx/conf.d/backend.inc
       sudo nginx -s reload
       echo "✅ Nginx 설정 로드 완료 (Blue)"
   else
-      echo "❌ 에러: be_blue.conf 파일을 찾을 수 없습니다."
+      echo "❌ 에러: be_blue.inc 파일을 찾을 수 없습니다."
       exit 1
   fi
 
@@ -94,13 +94,13 @@ else
     fi
   done
 
-  echo "4. Nginx 설정 교체 (be_green.conf -> backend.conf)"
-  if [ -f "$NGINX_CONF_DIR/be_green.conf" ]; then
-      sudo cp "$NGINX_CONF_DIR/be_green.conf" /etc/nginx/conf.d/backend.conf
+  echo "4. Nginx 설정 교체 (be_green.inc -> backend.inc)"
+  if [ -f "$NGINX_CONF_DIR/be_green.inc" ]; then
+      sudo cp "$NGINX_CONF_DIR/be_green.inc" /etc/nginx/conf.d/backend.inc
       sudo nginx -s reload
       echo "✅ Nginx 설정 로드 완료 (Green)"
   else
-      echo "❌ 에러: be_green.conf 파일을 찾을 수 없습니다."
+      echo "❌ 에러: be_green.inc 파일을 찾을 수 없습니다."
       exit 1
   fi
 

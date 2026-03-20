@@ -1,6 +1,6 @@
 # 1. 백엔드 Green 메인 API 경로 (8082 포트)
 location /api/ {
-    proxy_pass http://127.0.0.1:8082;
+    proxy_pass http://127.0.0.1:8080;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -9,6 +9,6 @@ location /api/ {
 }
 
 location /api/actuator/health {
-    proxy_pass http://127.0.0.1:8082/api/actuator/health;
+    proxy_pass http://127.0.0.1:8080/api/actuator/health;
     access_log off;
 }

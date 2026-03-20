@@ -11,11 +11,14 @@ import java.util.Map;
 @RestController
 public class HealthCheckController {
 
-    //나중에 여기 부분 security 설정에서 permitAll 해야됨
-
     @GetMapping("/")
     public ResponseEntity<?> hello(){
         return ResponseEntity.ok("Hello World");
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test(){
+        return ResponseEntity.ok("test");
     }
 
     @GetMapping("/hc")
