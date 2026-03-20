@@ -27,7 +27,7 @@ fi
 echo "--- 도커 실행 환경 테스트 통과 ---"
 
 # 현재 실행 중인 컨테이너 확인 (Up 상태인 blue가 있는지 체크)
-IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "backend-blue" | grep "Up" || true)
+IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "backend-blue" | grep -i "Up" || true)
 
 if [ -z "$IS_BLUE" ]; then
   echo "### 배포 시작: GREEN => BLUE (8081) ###"
@@ -43,7 +43,7 @@ if [ -z "$IS_BLUE" ]; then
     echo "3. Blue 헬스체크 중... ($i/20)"
     sleep 5
     # 컨테이너 내부 8080이 아닌, 호스트로 노출된 8081로 찌릅니다.
-    REQUEST=$(curl -s http://127.0.0.1:8081/api/actuator/health | grep "UP" || true)
+    REQUEST=$(curl -s http://127.0.0.1:8081/api/actuator/health | grep -i "UP" || true)
     if [ -n "$REQUEST" ]; then
       echo "✅ 헬스체크 성공!"
       break
@@ -82,7 +82,7 @@ else
   for i in {1..20}; do
     echo "3. Green 헬스체크 중... ($i/20)"
     sleep 5
-    REQUEST=$(curl -s http://127.0.0.1:8082/api/actuator/health | grep "UP" || true)
+    REQUEST=$(curl -s http://127.0.0.1:8082/api/actuator/health | grep -i "UP" || true)
     if [ -n "$REQUEST" ]; then
       echo "✅ 헬스체크 성공!"
       break
