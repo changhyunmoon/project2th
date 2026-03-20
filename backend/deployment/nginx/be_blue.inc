@@ -1,6 +1,6 @@
 # 백엔드 Blue 메인 API 경로 (8081 포트)
 location /api/ {
-    proxy_pass http://127.0.0.1:8081;
+    proxy_pass http://127.0.0.1:8081/api/;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
