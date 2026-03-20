@@ -1,6 +1,9 @@
 spring:
+  config:
+    import: "optional:classpath:/application-prod.yml"
+
   profiles:
-    active: local # 기본값은 로컬
+    active: local
     group:
       production-set1:
         - common
@@ -10,7 +13,6 @@ spring:
         - common
         - prod-db
         - port-9002
-
 ---
 # 공통 설정 (Actuator, JPA 기본 등)
 spring:
