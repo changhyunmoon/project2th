@@ -6,10 +6,10 @@ services:
     container_name: backend-blue
     #prod 프로필로 실행되도록 설정
     environment:
-      - SPRING_PROFILES_ACTIVE=production-set1
+      - SPRING_PROFILES_ACTIVE=prod
     #포트 포워딩. 외부의 8081 포트로 들어온 요청을 컨테이너 내부의 8080 포트로 전달
     ports:
-      - "8081:9001"
+      - "8081:8080"
 
     #DB 비번등 비밀 정보 파일 로드
     env_file:
@@ -31,9 +31,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:${BACKEND_IMAGE_TAG}
     container_name: backend-green
     environment:
-      - SPRING_PROFILES_ACTIVE=production-set2
+      - SPRING_PROFILES_ACTIVE=prod
     ports:
-      - "8082:9002"
+      - "8082:8080"
     env_file:
       - .env
     restart: always

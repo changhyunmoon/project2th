@@ -28,7 +28,9 @@ IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "frontend-blue" | grep "U
 if [ -z "$IS_BLUE" ]; then
   echo "### FE 배포 시작: GREEN => BLUE (8083) ###"
 
+  echo "1. Blue 이미지 가져오기"
   $DOCKER_COMPOSE -f "$COMPOSE_FILE" pull frontend-blue || exit 1
+  echo "2. Blue 컨테이너 실행"
   $DOCKER_COMPOSE -f "$COMPOSE_FILE" up -d frontend-blue || exit 1
 
   # 헬스체크 (React index.html 응답 확인)

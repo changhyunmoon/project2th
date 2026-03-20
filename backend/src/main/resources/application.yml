@@ -5,14 +5,11 @@ spring:
   profiles:
     active: local
     group:
-      production-set1:
+      prod:
         - common
         - prod-db
-        - port-9001
-      production-set2:
-        - common
-        - prod-db
-        - port-9002
+        - port
+
 ---
 # 공통 설정 (Actuator, JPA 기본 등)
 spring:
