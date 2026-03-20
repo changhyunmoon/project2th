@@ -9,10 +9,11 @@ services:
     container_name: backend-blue
     #prod 프로필로 실행되도록 설정
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_PROFILES_ACTIVE=production-set1
     #포트 포워딩. 외부의 8081 포트로 들어온 요청을 컨테이너 내부의 8080 포트로 전달
     ports:
-      - "8081:8080"
+      - "8081:9001"
+
     #DB 비번등 비밀 정보 파일 로드
     env_file:
       - .env
@@ -23,7 +24,7 @@ services:
       - team6-bluegreen
     #애플리케이션 정상 작동 중인지 체크
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:8080/api/actuator/health || exit 1" ]
+      test: [ "CMD-SHELL", "curl -f http://localhost:9001/api/actuator/health || exit 1" ]
       interval: 5s
       timeout: 2s
       retries: 5
@@ -33,16 +34,16 @@ services:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:${BACKEND_IMAGE_TAG}
     container_name: backend-green
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_PROFILES_ACTIVE=production-set2
     ports:
-      - "8082:8080"
+      - "8082:9002"
     env_file:
       - .env
     restart: always
     networks:
       - team6-bluegreen
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:8080/api/actuator/health || exit 1" ]
+      test: [ "CMD-SHELL", "curl -f http://localhost:9002/api/actuator/health || exit 1" ]
       interval: 10s
       timeout: 3s
       retries: 5

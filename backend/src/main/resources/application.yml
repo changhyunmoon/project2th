@@ -1,9 +1,23 @@
 spring:
   profiles:
-    active: local
+    active: local # 기본값은 로컬
 
 ---
+# 공통 설정 (Actuator, JPA 기본 등)
 spring:
   config:
     activate:
-      on-profile: prod
+      on-profile: common
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+management:
+  endpoints:
+    web:
+      base-path: /api/actuator
