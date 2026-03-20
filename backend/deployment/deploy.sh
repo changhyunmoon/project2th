@@ -27,7 +27,7 @@ fi
 echo "--- 도커 실행 환경 테스트 통과 ---"
 
 # 현재 실행 중인 컨테이너 확인 (Up 상태인 blue가 있는지 체크)
-IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "backend-blue" | grep "Up" || true)
+IS_BLUE=$($DOCKER_COMPOSE -f "$COMPOSE_FILE" ps | grep "backend-blue" | grep -i "Up" || true)
 
 if [ -z "$IS_BLUE" ]; then
   echo "### 배포 시작: GREEN => BLUE (8081) ###"
@@ -43,7 +43,7 @@ if [ -z "$IS_BLUE" ]; then
     echo "3. Blue 헬스체크 중... ($i/20)"
     sleep 5
     # 컨테이너 내부 8080이 아닌, 호스트로 노출된 8081로 찌릅니다.
-    REQUEST=$(curl -s http://127.0.0.1:8081/api/actuator/health | grep "UP" || true)
+    REQUEST=$(curl -s http://127.0.0.1:8081/api/actuator/health | grep -i "UP" || true)
     if [ -n "$REQUEST" ]; then
       echo "✅ 헬스체크 성공!"
       break
@@ -56,14 +56,14 @@ if [ -z "$IS_BLUE" ]; then
     fi
   done
 
-  echo "4. Nginx 설정 교체 (be_blue.conf -> backend.conf)"
+  echo "4. Nginx 설정 교체 (be_blue.inc -> backend.inc)"
   # Nginx 설정 파일이 존재하는지 확인 후 복사
-  if [ -f "$NGINX_CONF_DIR/be_blue.conf" ]; then
-      sudo cp "$NGINX_CONF_DIR/be_blue.conf" /etc/nginx/conf.d/backend.conf
+  if [ -f "$NGINX_CONF_DIR/be_blue.inc" ]; then
+      sudo cp "$NGINX_CONF_DIR/be_blue.inc" /etc/nginx/conf.d/backend.inc
       sudo nginx -s reload
       echo "✅ Nginx 설정 로드 완료 (Blue)"
   else
-      echo "❌ 에러: be_blue.conf 파일을 찾을 수 없습니다."
+      echo "❌ 에러: be_blue.inc 파일을 찾을 수 없습니다."
       exit 1
   fi
 
@@ -82,7 +82,7 @@ else
   for i in {1..20}; do
     echo "3. Green 헬스체크 중... ($i/20)"
     sleep 5
-    REQUEST=$(curl -s http://127.0.0.1:8082/api/actuator/health | grep "UP" || true)
+    REQUEST=$(curl -s http://127.0.0.1:8082/api/actuator/health | grep -i "UP" || true)
     if [ -n "$REQUEST" ]; then
       echo "✅ 헬스체크 성공!"
       break
@@ -94,13 +94,13 @@ else
     fi
   done
 
-  echo "4. Nginx 설정 교체 (be_green.conf -> backend.conf)"
-  if [ -f "$NGINX_CONF_DIR/be_green.conf" ]; then
-      sudo cp "$NGINX_CONF_DIR/be_green.conf" /etc/nginx/conf.d/backend.conf
+  echo "4. Nginx 설정 교체 (be_green.inc -> backend.inc)"
+  if [ -f "$NGINX_CONF_DIR/be_green.inc" ]; then
+      sudo cp "$NGINX_CONF_DIR/be_green.inc" /etc/nginx/conf.d/backend.inc
       sudo nginx -s reload
       echo "✅ Nginx 설정 로드 완료 (Green)"
   else
-      echo "❌ 에러: be_green.conf 파일을 찾을 수 없습니다."
+      echo "❌ 에러: be_green.inc 파일을 찾을 수 없습니다."
       exit 1
   fi
 

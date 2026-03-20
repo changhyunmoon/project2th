@@ -1,9 +1,41 @@
 spring:
+  config:
+    import: "optional:classpath:/application-prod.yml"
+
   profiles:
     active: local
+    group:
+      prod:
+        - common
+        - prod-db
+        - port
 
 ---
+# 공통 설정 (Actuator, JPA 기본 등)
 spring:
   config:
     activate:
-      on-profile: prod
+      on-profile: common
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+server:
+  servlet:
+    # 모든 API의 시작 주소를 /api로 강제함
+    context-path: /api
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
