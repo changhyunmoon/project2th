@@ -1,4 +1,4 @@
-package com.team6.backend.controller;
+package com.team6.backend.test.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

@@ -5,6 +5,10 @@ spring:
   profiles:
     active: local
     group:
+      local:
+        - common
+        - local-db
+        - port-8080
       prod:
         - common
         - prod-db
